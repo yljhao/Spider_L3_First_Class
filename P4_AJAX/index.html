@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			function SWPress(String){
+				var request = new XMLHttpRequest();
+				request.onreadystatechange=function()
+				{
+					if (request.readyState==4 && request.status==200)
+					{
+						document.getElementById("switch_text").innerHTML=request.responseText;
+						request.abort();
+					}
+				}
+				request.open("POST","?"+String,false);
+				request.send(null);
+			}
+		</script>
+	</head>
+	<body onload="SWPress('Onload')">
+		<h2>FunMaker WiFi switch.</h2>
+		<img src="logo.png">
+		<p></p>
+		<p  style="font-size:24pt;" id="switch_text">Switch state: Not requested....</p>
+		<button type="button" style="font-size:24pt; height:90px; width:300px; color:red;" onclick="SWPress('SW=OFF')">Power OFF</button><button type="button" style="font-size:24pt; height:90px; width:300px;color:green;" onclick="SWPress('SW=ON')">Power ON</button>
+		
+	</body>
+</html>
+
+
