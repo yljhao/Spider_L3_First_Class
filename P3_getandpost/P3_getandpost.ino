@@ -179,18 +179,23 @@ void WebService(int server_socket){
 
     memset(client_msg, 0, sizeof(client_msg));
     memset(input, 0, sizeof(input));
-    while(recv(client_socket, client_msg, sizeof(client_msg), 0) > 0){
-        // Find input variable.
-        char* inchr = 0;
-        inchr = strstr_P(client_msg, PSTR("var="));
-        if(inchr != 0){
-            sscanf(inchr, "var=%s", input);
-        }
 
-        Serial.write((unsigned char*)client_msg, strlen(client_msg));
+    int ret = 0;
+    while(1){
         memset(client_msg, 0, sizeof(client_msg));
+        ret = recv(client_socket, client_msg, sizeof(client_msg), 0);
+        if(ret > 0){
+            char* inchr = 0;
+            inchr = strstr_P(client_msg, PSTR("var="));
+            if(inchr != 0){
+                sscanf(inchr, "var=%s", input);
+            }
+            Serial.write((unsigned char*)client_msg, ret);
+        }
+        else{
+            break;
+        }
     }
-
     Serial.println();
 
 

@@ -166,6 +166,7 @@ void WebService(int server_socket){
     sockaddr_in client_name;
     socklen_t client_name_len = sizeof(client_name);
     char client_msg[100];
+    int ret;
 
     client_socket = accept(server_socket, (sockaddr *)&client_name, &client_name_len);
     if(client_socket < 0) return;
@@ -176,10 +177,15 @@ void WebService(int server_socket){
         return;
     }
 
-    memset(client_msg, 0, sizeof(client_msg));
-    while(recv(client_socket, client_msg, sizeof(client_msg), 0) > 0){
-        Serial.write((unsigned char*)client_msg, strlen(client_msg));
+    while(1){
         memset(client_msg, 0, sizeof(client_msg));
+        ret = recv(client_socket, client_msg, sizeof(client_msg), 0);
+        if(ret > 0){
+            Serial.write((unsigned char*)client_msg, ret);
+        }
+        else{
+            break;
+        }
     }
 
     memset(client_msg, 0, sizeof(client_msg));

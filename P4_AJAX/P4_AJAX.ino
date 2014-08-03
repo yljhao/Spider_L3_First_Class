@@ -451,6 +451,7 @@ unsigned char WLAN_IRQ_INTNUM = 0;
 
 unsigned char Relay_Status = 0;
 
+// Don't forget set correct WiFi SSID and Password.
 char AP_Ssid[] = {"..."};
 char AP_Pass[] = {"..."};
 
@@ -588,7 +589,10 @@ int Switch_WebService(void){
             memset(method, 0, sizeof(method));
             ret_st = WebServer_process_request(client_socket, method, sizeof(method), 
                                                file, sizeof(file), content, sizeof(content), &auth, 0);
-            if(ret_st < 0) return -1;
+            if(ret_st < 0){
+                task_timer = millis() + 250;
+                return -1;
+            }
 
             Serial.println("Method:");
             Serial.write((unsigned char*)method, strlen(method));
@@ -759,7 +763,7 @@ int Switch_WebService(void){
     }
     return 0;
 }
-
+#if 0
 void Find_Me(void){
     /* Timer register */
     static unsigned long tmr = 0;
@@ -774,7 +778,7 @@ void Find_Me(void){
         tmr = millis() + 30000;
     }
 }
-
+#endif
 #define WIFI_INIT           1
 #define WIFI_PROC           2
 #define WIFI_FAIL           3
@@ -822,7 +826,7 @@ void WiFi_Process(void){
         break;
         case WIFI_PROC:
 
-            Find_Me();
+            //Find_Me();
 
             ret_st = Switch_WebService();
             if(ret_st < 0){
