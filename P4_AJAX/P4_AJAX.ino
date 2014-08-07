@@ -577,11 +577,14 @@ int Switch_WebService(void){
         switch(sw_app_st){
             case WAIT_CONNECT:
             client_socket = -1;
+            Serial.print(F("Webserver wait incoming connection..."));
             client_socket = WebServer_wait_connect(http_server_socket);
             if(client_socket < 0){
-                task_timer = millis() + 250;
+                Serial.println(F("no connection."));
+                task_timer = millis() + 50;
                 return 0;
             }
+            Serial.println(F("incomming."));
 
             Serial.println(F("Incomming connection from client, Get client message."));
             memset(file, 0, sizeof(file));
@@ -590,8 +593,9 @@ int Switch_WebService(void){
             ret_st = WebServer_process_request(client_socket, method, sizeof(method), 
                                                file, sizeof(file), content, sizeof(content), &auth, 0);
             if(ret_st < 0){
-                task_timer = millis() + 250;
-                return -1;
+                task_timer = millis() + 50;
+                sw_app_st = CLOSE_CLIENT_CONN;
+                return 0;
             }
 
             Serial.println("Method:");
@@ -749,7 +753,7 @@ int Switch_WebService(void){
                 }
             }
 
-            task_timer = millis() + 250;
+            task_timer = millis() + 50;
             sw_app_st = CLOSE_CLIENT_CONN;
             break;
 
@@ -814,6 +818,8 @@ void WiFi_Process(void){
             addr.sa_data[4] = 0;
             addr.sa_data[5] = 1;
             sendto(sock, &temp, sizeof(temp), 0, &addr, sizeof(sockaddr));
+            delay(1000);
+            closesocket(sock);
             delay(1000);
 
             // Initial network apps

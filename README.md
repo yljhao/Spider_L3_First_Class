@@ -30,3 +30,14 @@ https://drive.google.com/file/d/0By0AKx4nVPKfbTBmbnZTWjFCaTA/edit?usp=sharing
 7. 確認Arduino供電正常，周邊連接穩固後，輸入AY自動更新韌體
 8. 更新韌體完後輸入0確認韌體版本為1.26
 9. 更新完成
+
+=================================================================================
+
+如何更換圖片或者網頁?
+
+1. 請至此下載bin2h.exe小程式 => https://code.google.com/p/bin2h/
+2. 將想轉換成二進位的圖片或者網頁與bin2h放到同一個資料夾下
+3. 打開命令列，輸入"bin2h.exe file_input.html file_output.h"
+4. 打開同資料夾下的file_output.h檔案，並且將C陣列資料貼到Arduino程式內的C陣列上
+5. 重新下載檔案檢查是否修改成功。
+

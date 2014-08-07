@@ -157,7 +157,7 @@ int WebServer_process_request(int socket, char* method, unsigned char method_siz
 
     // A string fifo for parsing purpose.
     char str_fifo[50];
-    int content_length = 10;
+    int content_length = 0;
 
     unsigned char state = 0;
 
